@@ -69,30 +69,48 @@ Node* buildTree() {
 // Function that checks Sum Tree property and returns subtree sum
 int checkSumTree(Node* root) {
 
-    // Base case: empty tree has sum = 0
-    if (root == NULL)
+    // 1️⃣ If the current node is NULL
+    //    An empty tree contributes sum = 0
+    if (root == NULL) {
         return 0;
+    }
 
-    // If node is a leaf, it is always a Sum Tree
-    if (root->left == NULL && root->right == NULL)
+    // 2️⃣ If the current node is a leaf node
+    //    Leaf nodes are always valid Sum Trees
+    else if (root->left == NULL && root->right == NULL) {
         return root->data;
+    }
 
-    // Recursively calculate sum of left subtree
-    int leftSum = checkSumTree(root->left);
+    // 3️⃣ Otherwise, the node has at least one child
+    else {
 
-    // Recursively calculate sum of right subtree
-    int rightSum = checkSumTree(root->right);
+        // 3.1 Get sum of left subtree
+        int leftSum = checkSumTree(root->left);
 
-    // If any subtree is not a Sum Tree
-    if (leftSum == -1 || rightSum == -1)
-        return -1;
+        // 3.2 Get sum of right subtree
+        int rightSum = checkSumTree(root->right);
 
-    // Check Sum Tree condition for current node
-    if (root->data != leftSum + rightSum)
-        return -1;
+        // 3.3 If left subtree is NOT a Sum Tree
+        if (leftSum == -1) {
+            return -1;
+        }
 
-    // Return sum of current subtree (node + children)
-    return root->data + leftSum + rightSum;
+        // 3.4 If right subtree is NOT a Sum Tree
+        if (rightSum == -1) {
+            return -1;
+        }
+
+        // 3.5 If current node does NOT satisfy Sum Tree property
+        if (root->data != leftSum + rightSum) {
+            return -1;
+        }
+
+        // 3.6 If everything is valid,
+        //     return total sum of this subtree
+        else {
+            return root->data + leftSum + rightSum;
+        }
+    }
 }
 
 // Wrapper function to check Sum Tree
