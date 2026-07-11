@@ -1,3 +1,9 @@
+// Balanced Binary Tree
+// A Binary Tree is balanced if for every node, the difference between the heights of its left and right subtrees is at most 1.
+// Mathematically,
+// | Height(Left Subtree) - Height(Right Subtree) | ≤ 1
+
+
 #include <algorithm>
 using namespace std;
 
