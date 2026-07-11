@@ -44,11 +44,7 @@ node* buildTree(node* root) {
 }
 
 // Function to print tree level by level
-#include <iostream>
-#include <queue>
-using namespace std;
 
-// Function to print Binary Tree level by level
 void levelOrderTraversal(node* root)
 {
     // If tree is empty
