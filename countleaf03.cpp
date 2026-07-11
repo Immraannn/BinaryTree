@@ -1,28 +1,21 @@
-void inorder(BinaryTreeNode<int> *root, int &count) {
-    
-    // Base case: if current node is NULL, stop recursion
-    if(root == NULL) {
-        return;
-    }
+// Function to count total leaf nodes
+int countLeafNodes(node* root)
+{
+    // Base Case: Empty tree
+    if (root == NULL)
+        return 0;
 
-    // Step 1: Traverse the left subtree
-    inorder(root->left, count);
-    
-    // Step 2: Check if current node is a leaf node
-    // A leaf node has no left child and no right child
-    if(root->left == NULL && root->right == NULL) {
-        count++;   // Increment leaf node count
-    }
+    // If current node has no children,
+    // it is a leaf node
+    if (root->left == NULL && root->right == NULL)
+        return 1;
 
-    // Step 3: Traverse the right subtree
-    inorder(root->right, count);
-}
+    // Count leaf nodes in left subtree
+    int leftLeaves = countLeafNodes(root->left);
 
-int noOfLeafNodes(BinaryTreeNode<int> *root) {
-    
-    int cnt = 0;          // Initialize leaf node counter
-    
-    inorder(root, cnt);  // Call inorder traversal to count leaf nodes
-    
-    return cnt;          // Return total number of leaf nodes
+    // Count leaf nodes in right subtree
+    int rightLeaves = countLeafNodes(root->right);
+
+    // Total leaf nodes
+    return leftLeaves + rightLeaves;
 }
