@@ -44,42 +44,57 @@ node* buildTree(node* root) {
 }
 
 // Function to print tree level by level
-void levelOrderTraversal(node* root) {
+#include <iostream>
+#include <queue>
+using namespace std;
 
-    queue<node*> q;                     // Queue to store nodes
-    q.push(root);                       // Push root node
-    q.push(NULL);                       // NULL marks end of level
+// Function to print Binary Tree level by level
+void levelOrderTraversal(node* root)
+{
+    // If tree is empty
+    if (root == NULL)
+        return;
 
-    while(!q.empty()) {                 // Loop until queue is empty
+    queue<node*> q;
 
-        node* temp = q.front();         // Get front node
-        q.pop();                        // Remove it from queue
+    // Push root node
+    q.push(root);
 
-        // If NULL encountered, one level is completed
-        if(temp == NULL) { 
-            cout << endl;               // Move to next line
+    // NULL acts as a level separator
+    q.push(NULL);
 
-            // If queue still has nodes, push NULL again
-            if(!q.empty()) { 
+    while (!q.empty())
+    {
+        // Get front node
+        node* current = q.front();
+        q.pop();
+
+        // If NULL is encountered,
+        // current level is completed
+        if (current == NULL)
+        {
+            cout << endl;
+
+            // If more nodes are left,
+            // insert another level separator
+            if (!q.empty())
                 q.push(NULL);
-            }  
         }
-        else {
-            cout << temp->data << " ";  // Print current node data
+        else
+        {
+            // Print current node
+            cout << current->data << " ";
 
-            // If left child exists, push into queue
-            if(temp->left) {
-                q.push(temp->left);
-            }
+            // Push left child into queue
+            if (current->left != NULL)
+                q.push(current->left);
 
-            // If right child exists, push into queue
-            if(temp->right) {
-                q.push(temp->right);
-            }
+            // Push right child into queue
+            if (current->right != NULL)
+                q.push(current->right);
         }
     }
 }
-
 // Inorder Traversal: Left → Root → Right
 void inorder(node* root) {
 
