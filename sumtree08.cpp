@@ -1,33 +1,49 @@
-#include <iostream>
-using namespace std;
+pair<bool, int> isSumTreeFast(Node* root)
+{
+    // Base case: Empty tree
+    if (root == NULL)
+    {
+        pair<bool, int> p = make_pair(true, 0);
+        return p;
+    }
 
-// Returns true if tree is a Sum Tree
+    // Base case: Leaf node
+    if (root->left == NULL && root->right == NULL)
+    {
+        pair<bool, int> p = make_pair(true, root->data);
+        return p;
+    }
+
+    // Get result from left subtree
+    pair<bool, int> leftAns = isSumTreeFast(root->left);
+
+    // Get result from right subtree
+    pair<bool, int> rightAns = isSumTreeFast(root->right);
+
+    bool left = leftAns.first;
+    bool right = rightAns.first;
+
+    // Check Sum Tree property at current node
+    bool condn = (root->data == leftAns.second + rightAns.second);
+
+    pair<bool, int> ans;
+
+    if (left && right && condn)
+    {
+        ans.first = true;
+
+        // Sum of current subtree
+        ans.second = 2 * root->data;
+    }
+    else
+    {
+        ans.first = false;
+    }
+
+    return ans;
+}
+
 bool isSumTree(Node* root)
 {
-    // Empty tree is a Sum Tree
-    if (root == NULL)
-        return true;
-
-    // Leaf node is always a Sum Tree
-    if (root->left == NULL && root->right == NULL)
-        return true;
-
-    // Find sum of left subtree
-    int leftSum = sum(root->left);
-
-    // Find sum of right subtree
-    int rightSum = sum(root->right);
-
-    // Check current node
-    bool current = (root->data == leftSum + rightSum);
-
-    // Check left subtree
-    bool left = isSumTree(root->left);
-
-    // Check right subtree
-    bool right = isSumTree(root->right);
-
-    // Tree is Sum Tree only if
-    // current node, left subtree and right subtree satisfy the condition
-    return current && left && right;
+    return isSumTreeFast(root).first;
 }
