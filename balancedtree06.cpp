@@ -34,56 +34,25 @@ public:
     - Returns height of subtree if it is balanced
     - Returns -1 if subtree is NOT balanced
 */
-int checkHeight(Node* root) {
-
-    // Base Case:
-    // If current node is NULL, height is 0 and tree is balanced
-    if (root == NULL) {
-        return 0;
+bool isBalanced(Node *root)
+{
+    // Base case
+    if (root == NULL)
+    {
+        return true;
     }
 
-    // Recursively check height of left subtree
-    int leftHeight = checkHeight(root->left);
+    bool left = isBalanced(root->left);
+    bool right = isBalanced(root->right);
 
-    // If left subtree is unbalanced, propagate -1 upward
-    if (leftHeight == -1) {
-        return -1;
+    bool diff = abs(height(root->left) - height(root->right)) <= 1;
+
+    if (left && right && diff)
+    {
+        return true;
     }
-
-    // Recursively check height of right subtree
-    int rightHeight = checkHeight(root->right);
-
-    // If right subtree is unbalanced, propagate -1 upward
-    if (rightHeight == -1) {
-        return -1;
-    }
-
-    // Check balance condition at current node
-    // If height difference is more than 1, tree is unbalanced
-    if (abs(leftHeight - rightHeight) > 1) {
-        return -1;
-    }
-
-    // If current node is balanced,
-    // return height of subtree rooted at this node
-    return max(leftHeight, rightHeight) + 1;
-}
-
-/*
-    Function: isBalanced
-    --------------------
-    This function checks if the entire binary tree is balanced.
-
-    Logic:
-    - If checkHeight returns -1 → tree is unbalanced
-    - Otherwise → tree is balanced
-*/
-bool isBalanced(Node* root) {
-
-    // Call helper function and check its return value
-    if (checkHeight(root) == -1) {
-        return false;   // Tree is NOT balanced
-    } else {
-        return true;    // Tree IS balanced
+    else
+    {
+        return false;
     }
 }
