@@ -1,43 +1,51 @@
-// Global variable to store the maximum diameter found so far
-int diameter = 0;
+// Diameter of a Binary Tree
+// The diameter of a binary tree is the length of the longest path between any two nodes.
+// The longest path may or may not pass through the root.
 
-// Function to calculate height of tree and update diameter
-int height(TreeNode* root) {
 
-    // Base case: if current node is NULL
-    // Height of an empty tree is 0
-    if (root == NULL)
+#include <iostream>
+using namespace std;
+
+// Returns height of tree
+int height(node* root)
+{
+    // Empty tree has height 0
+    if(root == NULL)
         return 0;
 
-    // Recursively calculate height of left subtree
+    // Height of left subtree
     int leftHeight = height(root->left);
 
-    // Recursively calculate height of right subtree
+    // Height of right subtree
     int rightHeight = height(root->right);
 
-    // Diameter at current node is:
-    // longest path going through this node
-    // = left subtree height + right subtree height
-    int currentDiameter = leftHeight + rightHeight;
-
-    // Update the global diameter if current is larger
-    diameter = max(diameter, currentDiameter);
-
-    // Height of current node =
-    // 1 (current node) + maximum height of its subtrees
+    // Height of current node
     return 1 + max(leftHeight, rightHeight);
 }
 
-// Function that user calls to get diameter
-int diameterOfBinaryTree(TreeNode* root) {
+// Returns diameter of tree
+int diameter(node* root)
+{
+    // Empty tree
+    if(root == NULL)
+        return 0;
 
-    // Initialize diameter to 0 before calculation
-    diameter = 0;
+    // Diameter in left subtree
+    int leftDiameter = diameter(root->left);
 
-    // Call height function to compute heights
-    // Diameter is updated during recursion
-    height(root);
+    // Diameter in right subtree
+    int rightDiameter = diameter(root->right);
 
-    // Return the final diameter (in terms of edges)
-    return diameter;
+    // Height of left subtree
+    int leftHeight = height(root->left);
+
+    // Height of right subtree
+    int rightHeight = height(root->right);
+
+    // Diameter passing through current node
+    int currentDiameter = leftHeight + rightHeight + 1;
+
+    // Return maximum among all possibilities
+    return max(currentDiameter,
+               max(leftDiameter, rightDiameter));
 }
