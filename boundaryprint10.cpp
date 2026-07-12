@@ -1,22 +1,3 @@
-#include<iostream>
-using namespace std;
-
-/*
-    Definition of a Binary Tree Node
-*/
-class Node {
-public:
-    int data;       // Stores value of the node
-    Node* left;     // Pointer to left child
-    Node* right;    // Pointer to right child
-
-    // Constructor to initialize a node
-    Node(int d) {
-        data = d;       // Assign data to node
-        left = NULL;    // Initially, left child is NULL
-        right = NULL;   // Initially, right child is NULL
-    }
-};
 
 /*
     Function to print the LEFT boundary of the tree
