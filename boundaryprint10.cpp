@@ -1,127 +1,99 @@
+class Solution
+{
+public:
 
-/*
-    Function to print the LEFT boundary of the tree
-    - Excludes leaf nodes
-    - Traverses from top to bottom
-*/
-void printLeftBoundary(Node* root) {
+    /*
+        Store the LEFT boundary of the tree
+        - Excludes leaf nodes
+        - Traverses from top to bottom
+    */
+    void printLeftBoundary(Node* root, vector<int> &ans)
+    {
+        if (root == NULL)
+            return;
 
-    // Base case: if current node is NULL, stop recursion
-    if (root == NULL) {
-        return;
+        if (root->left != NULL)
+        {
+            ans.push_back(root->data);
+            printLeftBoundary(root->left, ans);
+        }
+        else if (root->right != NULL)
+        {
+            ans.push_back(root->data);
+            printLeftBoundary(root->right, ans);
+        }
+
+        // Leaf nodes are ignored
     }
 
-    // If left child exists, this node is part of left boundary
-    if (root->left != NULL) {
+    /*
+        Store all LEAF nodes
+        - Left to Right
+    */
+    void printLeafNodes(Node* root, vector<int> &ans)
+    {
+        if (root == NULL)
+            return;
 
-        // Print current node because it is NOT a leaf
-        cout << root->data << " ";
+        printLeafNodes(root->left, ans);
 
-        // Move to the left child
-        printLeftBoundary(root->left);
+        if (root->left == NULL && root->right == NULL)
+            ans.push_back(root->data);
+
+        printLeafNodes(root->right, ans);
     }
 
-    // If left child does not exist but right child exists
-    else if (root->right != NULL) {
+    /*
+        Store the RIGHT boundary
+        - Excludes leaf nodes
+        - Bottom to Top
+    */
+    void printRightBoundary(Node* root, vector<int> &ans)
+    {
+        if (root == NULL)
+            return;
 
-        // Print current node because it is still part of left boundary
-        cout << root->data << " ";
+        if (root->right != NULL)
+        {
+            printRightBoundary(root->right, ans);
+            ans.push_back(root->data);
+        }
+        else if (root->left != NULL)
+        {
+            printRightBoundary(root->left, ans);
+            ans.push_back(root->data);
+        }
 
-        // Move to the right child
-        printLeftBoundary(root->right);
+        // Leaf nodes are ignored
     }
 
-    // If both children are NULL, it is a leaf node
-    // We DO NOT print leaf nodes in left boundary
-}
+    /*
+        Boundary Traversal
+        Order:
+        1. Root
+        2. Left Boundary
+        3. Leaf Nodes
+        4. Right Boundary
+    */
+    vector<int> boundaryTraversal(Node *root)
+    {
+        vector<int> ans;
 
-/*
-    Function to print ALL leaf nodes of the tree
-    - Uses inorder traversal
-    - Prints from leftmost leaf to rightmost leaf
-*/
-void printLeafNodes(Node* root) {
+        if (root == NULL)
+            return ans;
 
-    // Base case: if node is NULL, stop recursion
-    if (root == NULL) {
-        return;
+        // Root
+        ans.push_back(root->data);
+
+        // Left Boundary
+        printLeftBoundary(root->left, ans);
+
+        // Leaf Nodes
+        printLeafNodes(root, ans);
+
+        // Right Boundary
+        printRightBoundary(root->right, ans);
+
+        return ans;
     }
-
-    // First, traverse left subtree
-    printLeafNodes(root->left);
-
-    // Check if current node is a leaf node
-    if (root->left == NULL && root->right == NULL) {
-
-        // Print the leaf node
-        cout << root->data << " ";
-    }
-
-    // Finally, traverse right subtree
-    printLeafNodes(root->right);
-}
-
-/*
-    Function to print the RIGHT boundary of the tree
-    - Excludes leaf nodes
-    - Traverses bottom to top (reverse order)
-*/
-void printRightBoundary(Node* root) {
-
-    // Base case: if current node is NULL, stop recursion
-    if (root == NULL) {
-        return;
-    }
-
-    // If right child exists, go down first
-    if (root->right != NULL) {
-
-        // First recurse to the right child
-        printRightBoundary(root->right);
-
-        // Print current node AFTER recursion (bottom-up order)
-        cout << root->data << " ";
-    }
-
-    // If right child does not exist but left child exists
-    else if (root->left != NULL) {
-
-        // First recurse to the left child
-        printRightBoundary(root->left);
-
-        // Print current node AFTER recursion
-        cout << root->data << " ";
-    }
-
-    // If both children are NULL, it is a leaf node
-    // We DO NOT print leaf nodes in right boundary
-}
-
-/*
-    Main function to perform BOUNDARY TRAVERSAL
-    Order:
-    1. Root
-    2. Left Boundary
-    3. Leaf Nodes
-    4. Right Boundary (Reverse)
-*/
-void boundaryTraversal(Node* root) {
-
-    // If tree is empty, nothing to print
-    if (root == NULL) {
-        return;
-    }
-
-    // Step 1: Print the root node
-    cout << root->data << " ";
-
-    // Step 2: Print left boundary starting from root's left child
-    printLeftBoundary(root->left);
-
-    // Step 3: Print all leaf nodes
-    // Root is passed so both left and right subtree are covered
-    printLeafNodes(root);
-
-    // Step 4: Print right boundary starting from root's right child
-    printRightBoundary(root->right);
-}
+};
