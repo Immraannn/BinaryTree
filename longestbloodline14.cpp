@@ -1,84 +1,110 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <utility>
 using namespace std;
 
-/* 
-   Definition of a Binary Tree Node
-*/
-struct Node {
-    int data;        // Value of current node
-    Node* left;      // Pointer to left child
-    Node* right;     // Pointer to right child
+// Node of Binary Tree
+class node
+{
+public:
+    int data;
+    node* left;
+    node* right;
 
-    // Constructor to initialize node
-    Node(int val) {
-        data = val;
+    // Constructor
+    node(int value)
+    {
+        data = value;
         left = NULL;
         right = NULL;
     }
 };
 
-class Solution {
-private:
 
-    /*
-        Recursive helper function
-        root    → current node
-        currLen → length of current root-to-node path
-        currSum → sum of current root-to-node path
-        maxLen  → maximum length found so far (passed by reference)
-        maxSum  → sum corresponding to maximum length (passed by reference)
-    */
-    void solve(Node* root, int currLen, int currSum,
-               int &maxLen, int &maxSum) {
-
-        // Base case: if current node is NULL, stop recursion
-        if (root == NULL)
-            return;
-
-        // Increase path length as we go down
-        currLen++;
-
-        // Add current node value to path sum
-        currSum += root->data;
-
-        // Check if current node is a leaf node
-        if (root->left == NULL && root->right == NULL) {
-
-            // If current path length is greater than maximum length found
-            if (currLen > maxLen) {
-                maxLen = currLen;      // Update maximum length
-                maxSum = currSum;      // Update sum for this length
-            }
-            // If path length is same as maximum, choose max sum
-            else if (currLen == maxLen) {
-                maxSum = max(maxSum, currSum);
-            }
-        }
-
-        // Recur for left subtree
-        solve(root->left, currLen, currSum, maxLen, maxSum);
-
-        // Recur for right subtree
-        solve(root->right, currLen, currSum, maxLen, maxSum);
+// Function to find:
+// 1. Length of longest root-to-leaf path
+// 2. Sum of nodes on that path
+pair<int, int> solve(node* root)
+{
+    // Base case:
+    // Empty tree has length 0 and sum 0
+    if (root == NULL)
+    {
+        return {0, 0};
     }
 
-public:
 
-    /*
-        Main function to return sum of longest bloodline
-    */
-    int sumOfLongestBloodline(Node* root) {
+    // Recursively find longest path in left subtree
+    pair<int, int> left = solve(root->left);
 
-        // Stores maximum path length from root to leaf
-        int maxLen = 0;
 
-        // Stores sum of nodes on the longest path
-        int maxSum = 0;
+    // Recursively find longest path in right subtree
+    pair<int, int> right = solve(root->right);
 
-        // Start recursive traversal from root
-        solve(root, 0, 0, maxLen, maxSum);
 
-        // Return final answer
-        return maxSum;
+    // If left path is longer
+    if (left.first > right.first)
+    {
+        return {
+            left.first + 1,          // Increase length by 1
+            left.second + root->data // Add current node's value
+        };
     }
-};
+
+
+    // If right path is longer
+    else if (right.first > left.first)
+    {
+        return {
+            right.first + 1,          // Increase length by 1
+            right.second + root->data // Add current node's value
+        };
+    }
+
+
+    // If both paths have the same length
+    else
+    {
+        // Choose the path having the greater sum
+        return {
+            left.first + 1,
+            root->data + max(left.second, right.second)
+        };
+    }
+}
+
+
+int main()
+{
+    /*
+                1
+               / \
+              2   3
+             / \
+            4   5
+    */
+
+    // Create tree
+    node* root = new node(1);
+
+    root->left = new node(2);
+    root->right = new node(3);
+
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+
+
+    // Call solve()
+    pair<int, int> answer = solve(root);
+
+
+    // answer.first = length
+    // answer.second = sum
+    cout << "Length of longest bloodline: "
+         << answer.first << endl;
+
+    cout << "Sum of longest bloodline: "
+         << answer.second << endl;
+
+
+    return 0;
+}
