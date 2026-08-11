@@ -45,50 +45,24 @@ node* buildTree(node* root) {
 
 // Function to print tree level by level
 
-void levelOrderTraversal(node* root)
-{
-    // If tree is empty
+void levelOrder(Node* root) {
     if (root == NULL)
         return;
 
-    queue<node*> q;
-
-    // Push root node
+    queue<Node*> q;
     q.push(root);
 
-    // NULL acts as a level separator
-    q.push(NULL);
-
-    while (!q.empty())
-    {
-        // Get front node
-        node* current = q.front();
+    while (!q.empty()) {
+        Node* current = q.front();
         q.pop();
 
-        // If NULL is encountered,
-        // current level is completed
-        if (current == NULL)
-        {
-            cout << endl;
+        cout << current->data << " ";
 
-            // If more nodes are left,
-            // insert another level separator
-            if (!q.empty())
-                q.push(NULL);
-        }
-        else
-        {
-            // Print current node
-            cout << current->data << " ";
+        if (current->left)
+            q.push(current->left);
 
-            // Push left child into queue
-            if (current->left != NULL)
-                q.push(current->left);
-
-            // Push right child into queue
-            if (current->right != NULL)
-                q.push(current->right);
-        }
+        if (current->right)
+            q.push(current->right);
     }
 }
 // Inorder Traversal: Left → Root → Right
