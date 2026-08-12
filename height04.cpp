@@ -1,22 +1,11 @@
 #include <iostream>
 using namespace std;
-
-// Function to find height of a binary tree
 int height(node* root)
 {
-    // Base Case:
-    // Empty tree has height 0
     if (root == NULL)
         return 0;
-
-    // Find height of left subtree
     int leftHeight = height(root->left);
-
-    // Find height of right subtree
     int rightHeight = height(root->right);
-
-    // Height of current node =
-    // 1 (current node) + maximum of left and right subtree heights
     return 1 + max(leftHeight, rightHeight);
 }
 
